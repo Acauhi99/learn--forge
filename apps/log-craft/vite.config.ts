@@ -1,40 +1,34 @@
 /// <reference types='vitest' />
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
+import { join } from 'path';
 
-export default defineConfig(() => ({
+export default defineConfig({
   root: __dirname,
   cacheDir: '../../node_modules/.vite/apps/log-craft',
-  server: {
-    port: 4204,
-    host: 'localhost',
-  },
-  preview: {
-    port: 4204,
-    host: 'localhost',
-  },
-  plugins: [react()],
-  // Uncomment this if you are using workers.
-  // worker: {
-  //  plugins: [ nxViteTsPaths() ],
-  // },
-  build: {
-    outDir: './dist',
-    emptyOutDir: true,
-    reportCompressedSize: true,
-    commonjsOptions: {
-      transformMixedEsModules: true,
+  plugins: [react(), nxViteTsPaths()],
+  resolve: {
+    alias: {
+      '@learn--forge/common': join(__dirname, '../../libs/common/src'),
     },
   },
   test: {
-    watch: false,
     globals: true,
+    cache: { dir: '../../node_modules/.vitest' },
     environment: 'jsdom',
-    include: ['{src,tests}/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
-    reporters: ['default'],
-    coverage: {
-      reportsDirectory: './test-output/vitest/coverage',
-      provider: 'v8' as const,
+    include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+  },
+  server: {
+    port: 4204,
+    host: 'localhost',
+    fs: {
+      allow: ['../../'],
     },
   },
-}));
+  build: {
+    outDir: '../../dist/apps/log-craft',
+    reportCompressedSize: true,
+    commonjsOptions: { transformMixedEsModules: true },
+  },
+});
