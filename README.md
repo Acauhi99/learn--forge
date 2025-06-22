@@ -1,82 +1,105 @@
-# LearnForge
+# Learn--Forge 🔥
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+## Project Overview
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is almost ready ✨.
+Learn--Forge is an NX monorepo built to explore and improve frontend development skills with React. Instead of using a micro-frontend approach, this project implements a modular monolith architecture where multiple frontend applications share a common component library.
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/getting-started/tutorials/react-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+The project consists of three main applications:
 
-## Finish your CI setup
+- 🧠 **Log-Craft**: A logic training platform for practicing programming concepts
+- 📝 **Blog**: A technical blog for sharing articles about development
+- 👤 **Portfolio**: A personal portfolio site showcasing skills and projects
 
-[Click here to finish setting up your workspace!](https://cloud.nx.app/connect/15jIAI78BJ)
+All applications share common components like Layout, Header, and Footer through a shared library, enabling consistent UX/UI across all apps while maintaining independent codebases.
 
+## Repository Structure
 
-## Run tasks
-
-To run the dev server for your app, use:
-
-```sh
-npx nx serve learn--forge
+```
+apps/
+├── log-craft/   - Logic training platform
+├── blog/        - Technical blogging platform
+└── portfolio/   - Portfolio website
+libs/
+└── common/      - Shared components and utilities
 ```
 
-To create a production bundle:
+## Technologies Used
 
-```sh
-npx nx build learn--forge
+- 🏗️ **NX** - Monorepo build system
+- ⚛️ **React 19** - UI framework
+- 📘 **TypeScript** - Type safety and developer experience
+- ⚡ **Vite** - Fast, modern build tool and dev server
+- 🧰 **pnpm** - Efficient package manager alternative to npm
+- 🎨 **Tailwind CSS** - Utility-first CSS framework
+- 🧭 **React Router** - Navigation between and within applications
+- 🌓 **Dark Mode Support** - System preference detection with manual toggle
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 16+
+- pnpm 7+
+
+### Installation
+
+1. Install dependencies
+
+```bash
+pnpm install
 ```
 
-To see all available targets to run for a project, run:
+2. Build the common library
 
-```sh
-npx nx show project learn--forge
+```bash
+pnpm nx build common
 ```
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+## Running Locally
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+Each application runs on its own port:
 
-## Add new projects
+### Log-Craft: http://localhost:4204
 
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
-
-Use the plugin's generator to create new projects.
-
-To generate a new application, use:
-
-```sh
-npx nx g @nx/react:app demo
+```bash
+pnpm nx serve log-craft
 ```
 
-To generate a new library, use:
+### Blog: http://localhost:4201
 
-```sh
-npx nx g @nx/react:lib mylib
+```bash
+pnpm nx serve blog
 ```
 
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
+### Portfolio: http://localhost:4202
 
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+```bash
+pnpm nx serve portfolio
+```
 
+You can navigate between applications using the header navigation links in each app.
 
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## Development Notes
 
-## Install Nx Console
+- Changes to the common library require rebuilding: `pnpm nx build common`
+- The navigation between apps works via direct URL changes with cross-app links
+- Dark mode preferences are saved in localStorage and shared across all apps
+- Each app detects which app is currently active based on the URL port
 
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
+## Author
 
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+👨‍💻 **Mateus Acauhi**
 
-## Useful links
+- GitHub: [@Acauhi99](https://github.com/Acauhi99)
+- LinkedIn: [acauhi](https://www.linkedin.com/in/acauhi/)
 
-Learn more:
+## Future Enhancements
 
-- [Learn more about this workspace setup](https://nx.dev/getting-started/tutorials/react-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+- 🔄 Add CI/CD pipeline for automated deployments
+- 🧪 Increase test coverage across applications
+- 📱 Improve mobile responsiveness
+- 🔐 Add authentication to protect certain routes
 
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+---
+
+Happy coding! 💻
