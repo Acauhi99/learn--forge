@@ -1,9 +1,34 @@
-import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useState, useEffect, useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
 
-type AppLinks = {
+type AppConfig = {
   name: string;
-  path: string;
+  appId: string;
+  port: string;
+  pathIndicator?: string;
+};
+
+const getAppUrl = (appId: string, port: string): string => {
+  const envUrls: Record<string, string | undefined> = {
+    'log-craft': import.meta.env.VITE_LOGCRAFT_URL,
+    portfolio: import.meta.env.VITE_PORTFOLIO_URL,
+    blog: import.meta.env.VITE_BLOG_URL,
+  };
+
+  const url = envUrls[appId] || `http://localhost:${port}`;
+
+  if (
+    import.meta.env.DEV &&
+    !url.includes('localhost') &&
+    !url.includes('127.0.0.1')
+  ) {
+    console.warn(
+      `Unexpected URL for ${appId}: ${url}. Defaulting to localhost.`
+    );
+    return `http://localhost:${port}`;
+  }
+
+  return url;
 };
 
 export interface HeaderProps {
@@ -12,59 +37,81 @@ export interface HeaderProps {
 }
 
 export function Header({ darkMode, toggleDarkMode }: HeaderProps) {
+  const [currentApp, setCurrentApp] = useState<string>('');
   const location = useLocation();
   const currentPath = location.pathname;
 
-  const [currentApp, setCurrentApp] = useState<string>('');
+  const apps = useMemo<AppConfig[]>(
+    () => [
+      {
+        name: 'Logic Training',
+        appId: 'log-craft',
+        port: '4204',
+        pathIndicator: '/log-craft',
+      },
+      {
+        name: 'Portfolio',
+        appId: 'portfolio',
+        port: '4202',
+        pathIndicator: '/portfolio',
+      },
+      {
+        name: 'Blog',
+        appId: 'blog',
+        port: '4201',
+        pathIndicator: '/blog',
+      },
+    ],
+    []
+  );
 
   useEffect(() => {
-    if (currentPath.includes('/portfolio')) {
-      setCurrentApp('portfolio');
-    } else if (currentPath.includes('/blog')) {
-      setCurrentApp('blog');
-    } else {
-      setCurrentApp('log-craft');
-    }
-  }, [currentPath]);
+    const currentPort = window.location.port;
+    const appByPort = apps.find((app) => app.port === currentPort);
 
-  const apps: AppLinks[] = [
-    { name: 'Logic Training', path: '/' },
-    { name: 'Portfolio', path: '/portfolio' },
-    { name: 'Blog', path: '/blog' },
-  ];
+    if (appByPort) {
+      setCurrentApp(appByPort.appId);
+      return;
+    }
+
+    const appByPath = apps.find((app) =>
+      app.pathIndicator ? currentPath.includes(app.pathIndicator) : false
+    );
+
+    if (appByPath) {
+      setCurrentApp(appByPath.appId);
+      return;
+    }
+
+    setCurrentApp(apps[0].appId);
+  }, [currentPath, apps]);
 
   return (
     <header className="w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700 shadow-sm">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         <div className="flex items-center space-x-4">
           <h1 className="text-xl font-bold text-gray-800 dark:text-white">
-            <Link
-              to="/"
+            <a
+              href="/"
               className="hover:text-blue-500 dark:hover:text-blue-400 transition duration-200"
             >
               Acauhi Dev
-            </Link>
+            </a>
           </h1>
         </div>
 
         <nav className="flex items-center space-x-6">
           <div className="hidden md:flex space-x-4">
             {apps
-              .filter(
-                (app) =>
-                  (app.name === 'Logic Training' &&
-                    currentApp !== 'log-craft') ||
-                  (app.name === 'Portfolio' && currentApp !== 'portfolio') ||
-                  (app.name === 'Blog' && currentApp !== 'blog')
-              )
+              .filter((app) => app.appId !== currentApp)
               .map((app) => (
-                <Link
+                <a
                   key={app.name}
-                  to={app.path}
+                  href={getAppUrl(app.appId, app.port)}
                   className="px-3 py-2 text-gray-600 hover:text-blue-500 dark:text-gray-300 dark:hover:text-blue-400 font-medium transition duration-200"
                 >
                   {app.name}
-                </Link>
+                </a>
               ))}
           </div>
 
