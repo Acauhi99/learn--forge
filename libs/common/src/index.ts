@@ -1,3 +1,3 @@
-export * from './lib/Footer';
-export * from './lib/Header';
-export * from './lib/Layout';
+export * from './lib/layout/Footer';
+export * from './lib/layout/Header';
+export * from './lib/layout/Layout';
